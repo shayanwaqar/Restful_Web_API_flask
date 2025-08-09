@@ -21,5 +21,15 @@ def hello():
     else:
         return 'Hello John Doe'
 
+@app.route('/echo', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def api_echo():
+    if request.method == 'GET':
+        return 'echo: GET\n'
+    elif request.method == 'POST':
+        return 'echo: POST\n'
+    else:
+        return 'echo: other HTTP method'
+
+
 if __name__ == '__main__':
     app.run()
