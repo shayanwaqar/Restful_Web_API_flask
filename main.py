@@ -1,5 +1,5 @@
 #Python flask RESTful Web API
-from flask import Flask, url_for, request
+from flask import Flask, url_for, request, json
 app = Flask(__name__)
 
 @app.route('/')
@@ -29,6 +29,20 @@ def api_echo():
         return 'echo: POST\n'
     else:
         return 'echo: other HTTP method'
+    
+@app.route('/messages', methods=['POST'])
+def api_messages():
+    if request.headers['Content-Type'].startswith('text/plain') == 'test/plain':
+        return 'Test Message: ' + request.data
+    elif request.headers['Content-Type'] == 'application/json':
+        return 'JSON Message: ' + json.dumps(request.json)
+    elif request.headers['Content-Type'] == 'application/octet-stream':
+        f = open('./binary', 'wb')
+        f.write(request.data)
+        f.close()
+        return "Binary message written!"
+    else:
+        return "415 Unsupported Media Type ;)"
 
 
 if __name__ == '__main__':
