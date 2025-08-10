@@ -1,4 +1,5 @@
 #Python flask RESTful Web API
+import json
 from flask import Flask, url_for, request, json
 app = Flask(__name__)
 
@@ -42,7 +43,7 @@ def api_messages():
         f.close()
         return "Binary message written!"
     else:
-        return "415 Unsupported Media Type ;)"
+        return "415 Unsupported Media Type."
 
 
 if __name__ == '__main__':
