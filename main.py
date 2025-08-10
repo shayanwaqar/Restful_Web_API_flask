@@ -31,20 +31,18 @@ def api_echo():
     else:
         return 'echo: other HTTP method'
     
-@app.route('/messages', methods=['POST'])
-def api_messages():
-    if request.headers['Content-Type'].startswith('text/plain') == 'test/plain':
-        return 'Test Message: ' + request.data
-    elif request.headers['Content-Type'] == 'application/json':
-        return 'JSON Message: ' + json.dumps(request.json)
-    elif request.headers['Content-Type'] == 'application/octet-stream':
-        f = open('./binary', 'wb')
-        f.write(request.data)
-        f.close()
+@app.post("/messages")
+def messages():
+    ctype = (request.content_type or "").lower()
+    if ctype.startswith("text/plain"): #clients and curl often sends 'text/plain; charset=utf-8'
+        return "Text Message: " + request.get_data(as_text=True)
+    if request.is_json:
+        return "JSON Message: " + json.dumps(request.get_json())
+    if ctype.startswith("application/octet-stream"):
+        with open("binary", "wb") as f:
+            f.write(request.get_data())
         return "Binary message written!"
-    else:
-        return "415 Unsupported Media Type."
+    return "415 Unsupported Media Type ;)", 415
 
-
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True) # this will prevent the need to restart server after every change.
