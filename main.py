@@ -50,5 +50,17 @@ def messages():
     except:
         print('ERROR')
 
+@app.get("/hello")
+def api_hello():
+    data = {
+        'name': 'Shayan',
+        'major': 'CS'
+    }
+    js = json.dumps(data) #convert dictionary to JSON
+    resp = Response(js, status=200, mimetype='application/json')
+    resp.headers['Link'] = 'http://127.0.0.1:5000/hello'
+
+    return resp
+
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
