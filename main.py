@@ -63,5 +63,23 @@ def api_hello():
     resp.headers['Link'] = 'http://127.0.0.1:5000/hello'
     return resp
 
+@app.errorhandler(404)
+def not_found(error=None):
+    msg = {
+        'error': 404,
+        'msg': 'Not found' + request.url
+    }
+    resp = jsonify(msg)
+    resp.status_code = 404
+    return resp
+
+@app.route('/users/<user_id>')
+def api_user(user_id):
+    users = {'1':'john', '2':'steve', '3':'bill'}
+    if user_id in users:
+        return jsonify({user_id:users[user_id]})
+    else:
+        return not_found()
+
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
