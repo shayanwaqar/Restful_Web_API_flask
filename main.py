@@ -1,6 +1,6 @@
 #Python flask RESTful Web API
 import json
-from flask import Flask, url_for, request, json, Response
+from flask import Flask, url_for, request, json, Response, jsonify
 app = Flask(__name__)
 
 @app.route('/')
@@ -56,10 +56,11 @@ def api_hello():
         'name': 'Shayan',
         'major': 'CS'
     }
-    js = json.dumps(data) #convert dictionary to JSON
-    resp = Response(js, status=200, mimetype='application/json')
+    resp = jsonify(data)
+    # js = json.dumps(data) #convert dictionary to JSON
+    # resp = Response(js, status=200, mimetype='application/json')
+    resp.status_code = 200
     resp.headers['Link'] = 'http://127.0.0.1:5000/hello'
-
     return resp
 
 if __name__ == "__main__":
