@@ -1,6 +1,8 @@
 #Python flask RESTful Web API
 import json
 from flask import Flask, url_for, request, json, Response, jsonify
+from functools import wraps
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -84,6 +86,12 @@ def api_user(user_id):
 def check_auth(username, password):
     return username == 'admin' and password == 'secret'
 
+def authenticate():
+    message = {'message': "Authentication required."}
+    resp = jsonify(message)
+    resp.status_code = 401 #401 Unauthorized - credentials missing or wrong
+    resp.headers['WWW-Authenticate'] = 'Basic realm="Example"'
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
