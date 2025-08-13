@@ -93,5 +93,16 @@ def authenticate():
     resp.headers['WWW-Authenticate'] = 'Basic realm="Example"'
     return resp
 
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth:
+            return authenticate()
+        elif not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwawrgs)
+    return decorated
+
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
