@@ -17,12 +17,12 @@ def api_articles():
 def api_article(article_id):
     return 'You are reading article: ' + article_id
 
-@app.route('/hello')
-def hello():
+@app.route('/hi')
+def hi():
     if 'name' in request.args:
-        return 'Hello ' + request.args['name']
+        return 'Hi ' + request.args['name']
     else:
-        return 'Hello John Doe'
+        return 'Hi John Doe'
 
 @app.route('/echo', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def api_echo():
@@ -52,7 +52,7 @@ def messages():
     except:
         print('ERROR')
 
-@app.get("/hello")
+@app.get("/response_hello")
 def api_hello():
     data = {
         'name': 'Shayan',
@@ -101,8 +101,16 @@ def requires_auth(f):
             return authenticate()
         elif not check_auth(auth.username, auth.password):
             return authenticate()
-        return f(*args, **kwawrgs)
+        return f(*args, **kwargs)
     return decorated
+
+@app.route('/hello')
+@requires_auth
+def hello():
+    if 'name' in request.args:
+        return 'Authorized Hello ' + request.args['name']
+    else:
+        return 'Hello Authorized John Doe'
 
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
