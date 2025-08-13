@@ -81,5 +81,9 @@ def api_user(user_id):
     else:
         return not_found()
 
+def check_auth(username, password):
+    return username == 'admin' and password == 'secret'
+
+
 if __name__ == "__main__":
     app.run(debug=True) # this will prevent the need to restart server after every change.
